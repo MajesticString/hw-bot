@@ -8,7 +8,7 @@
 		"strict": true,
 		"checkJs": true,
 		"downlevelIteration": true,
-		"importsNotUsedAsValues": "error",
+		"importsNotUsedAsValues": "remove",
 		"experimentalDecorators": true,
 		"paths": {
 			"#lib/*": ["lib/*"],

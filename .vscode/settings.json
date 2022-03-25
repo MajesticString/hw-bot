@@ -2,5 +2,11 @@
 	"typescript.preferences.importModuleSpecifierEnding": "js",
 	"javascript.preferences.importModuleSpecifierEnding": "js",
 	"typescript.preferences.importModuleSpecifier": "relative",
-	"javascript.preferences.importModuleSpecifier": "relative"
+	"javascript.preferences.importModuleSpecifier": "relative",
+	"cSpell.words": ["discordjs", "Firestore"],
+	"[typescript]": {
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": true
+		}
+	}
 }

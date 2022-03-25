@@ -9,6 +9,7 @@ export default defineConfig({
 	minify: false,
 	tsconfig: 'tsconfig.json',
 	target: 'es2022',
+	sourcemap: true,
 	splitting: false,
 	skipNodeModulesBundle: true,
 	shims: false,
