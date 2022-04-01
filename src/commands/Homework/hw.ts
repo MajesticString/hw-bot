@@ -11,6 +11,7 @@ import { getClass, Subjects } from '../../lib/utils/firestore.js';
 @ApplyOptions<CommandOptions>({
   name: 'hw',
   description: 'Shows homework for a grade',
+  requiredClientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
 })
 export class UserCommand extends Command {
   public async chatInputRun(interaction: CommandInteraction) {

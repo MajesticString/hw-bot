@@ -14,6 +14,7 @@ import type { CommandInteraction, ContextMenuInteraction } from 'discord.js';
   chatInputCommand: {
     register: true,
   },
+  requiredClientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
 })
 export class UserCommand extends Command {
   public async chatInputRun(interaction: CommandInteraction) {
@@ -38,7 +39,9 @@ export class UserCommand extends Command {
           fields: [
             {
               name: 'Reputation',
-              value: user?.reputation.toString(),
+              value:
+                user?.reputation.toString() +
+                ' (you can gain reputation by suggesting homework using the `/add` command)',
             },
           ],
         },

@@ -3,6 +3,7 @@ import {
   ApplicationCommandRegistry,
   Command,
   CommandOptions,
+  RegisterBehavior,
 } from '@sapphire/framework';
 import type { CommandInteraction } from 'discord.js';
 
@@ -20,9 +21,12 @@ export class UserCommand extends Command {
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry
   ) {
-    registry.registerChatInputCommand({
-      name: this.name,
-      description: this.description,
-    });
+    registry.registerChatInputCommand(
+      (builder) => builder.setName(this.name).setDescription(this.description),
+      {
+        behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
+        registerCommandIfMissing: true,
+      }
+    );
   }
 }

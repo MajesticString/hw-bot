@@ -13,6 +13,7 @@ import { TEST_SERVER_ID } from '../../lib/constants.js';
 @ApplyOptions<CommandOptions>({
   description: 'Evals any JavaScript code',
   preconditions: ['OwnerOnly'],
+  requiredClientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
 })
 export class UserCommand extends Command {
   public async chatInputRun(message: CommandInteraction) {
@@ -27,7 +28,6 @@ export class UserCommand extends Command {
     const output = success
       ? codeBlock('js', result)
       : `**ERROR**: ${codeBlock('bash', result)}`;
-    if (args.getBoolean('silent', false)) return null;
 
     const typeFooter = `**Type**: ${codeBlock('typescript', type)}`;
 
@@ -44,8 +44,14 @@ export class UserCommand extends Command {
     }
 
     return message.replied
-      ? message.followUp(`${output}\n${typeFooter}`)
-      : message.reply(`${output}\n${typeFooter}`);
+      ? message.followUp({
+          content: `${output}\n${typeFooter}`,
+          ephemeral: message.options.getBoolean('silent', false) ?? false,
+        })
+      : message.reply({
+          content: `${output}\n${typeFooter}`,
+          ephemeral: message.options.getBoolean('silent', false) ?? false,
+        });
   }
   public async registerApplicationCommands(i: ApplicationCommandRegistry) {
     i.registerChatInputCommand(
@@ -76,7 +82,7 @@ export class UserCommand extends Command {
           ),
 
       {
-        guildIds: [TEST_SERVER_ID],
+        guildIds: ['882695828140073052'],
         idHints: ['956774185290567720'],
       }
     );

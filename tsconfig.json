@@ -1,19 +1,22 @@
 {
-	"compilerOptions": {
-		"rootDir": "src",
-		"baseUrl": "./src",
-		"outDir": "dist",
-		"module": "ES2022",
-		"moduleResolution": "node",
-		"strict": true,
-		"checkJs": true,
-		"downlevelIteration": true,
-		"importsNotUsedAsValues": "remove",
-		"experimentalDecorators": true,
-		"paths": {
-			"#lib/*": ["lib/*"],
-			"#utils/*": ["lib/utils/*"]
-		}
-	},
-	"include": ["src"]
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": "./src",
+    "outDir": "dist",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "strict": true,
+    "checkJs": true,
+    "target": "ES2021",
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "importsNotUsedAsValues": "remove",
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "#lib/*": ["lib/*"],
+      "#utils/*": ["lib/utils/*"]
+    }
+  },
+  "include": ["src"]
 }

@@ -13,8 +13,15 @@ export class UserEvent extends Listener<typeof Events.ChatInputCommandDenied> {
     // Use cases for this are for example permissions error when running the `eval` command.
     if (Reflect.get(Object(context), 'silent')) return;
 
-    return interaction.channel?.send({
+    return interaction.reply({
       content,
+      ephemeral:
+        !interaction.guild?.me
+          ?.permissionsIn(interaction.channelId)
+          .has('EMBED_LINKS') ||
+        !interaction.guild?.me
+          ?.permissionsIn(interaction.channelId)
+          .has('SEND_MESSAGES'),
       allowedMentions: { users: [interaction.user.id], roles: [] },
     });
   }
