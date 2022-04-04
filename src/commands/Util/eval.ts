@@ -4,7 +4,6 @@ import {
   Command,
   CommandOptions,
 } from '@sapphire/framework';
-import { Type } from '@sapphire/type';
 import { codeBlock, isThenable } from '@sapphire/utilities';
 import type { CommandInteraction } from 'discord.js';
 import { inspect } from 'util';
@@ -19,7 +18,7 @@ export class UserCommand extends Command {
   public async chatInputRun(message: CommandInteraction) {
     const code = message.options.getString('code', true);
     const args = message.options;
-    const { result, success, type } = await this.eval(message, code, {
+    const { result, success } = await this.eval(message, code, {
       async: args.getBoolean('async', false) ?? false,
       depth: Number(args.getInteger('depth')) ?? 0,
       showHidden: args.getBoolean('hidden', false) ?? false,
@@ -29,27 +28,25 @@ export class UserCommand extends Command {
       ? codeBlock('js', result)
       : `**ERROR**: ${codeBlock('bash', result)}`;
 
-    const typeFooter = `**Type**: ${codeBlock('typescript', type)}`;
-
     if (output.length > 2000) {
       return message.replied
         ? message.followUp({
-            content: `Output was too long... sent the result as a file.\n\n${typeFooter}`,
+            content: `Output was too long... sent the result as a file.`,
             files: [{ attachment: Buffer.from(output), name: 'output.js' }],
           })
         : message.reply({
-            content: `Output was too long... sent the result as a file.\n\n${typeFooter}`,
+            content: `Output was too long... sent the result as a file.`,
             files: [{ attachment: Buffer.from(output), name: 'output.js' }],
           });
     }
 
     return message.replied
       ? message.followUp({
-          content: `${output}\n${typeFooter}`,
+          content: `${output}`,
           ephemeral: message.options.getBoolean('silent', false) ?? false,
         })
       : message.reply({
-          content: `${output}\n${typeFooter}`,
+          content: `${output}`,
           ephemeral: message.options.getBoolean('silent', false) ?? false,
         });
   }
@@ -113,7 +110,6 @@ export class UserCommand extends Command {
       success = false;
     }
 
-    const type = new Type(result).toString();
     if (isThenable(result)) result = await result;
 
     if (typeof result !== 'string') {
@@ -123,6 +119,6 @@ export class UserCommand extends Command {
       });
     }
 
-    return { result, success, type };
+    return { result, success };
   }
 }

@@ -20,9 +20,33 @@ export class UserCommand extends Command {
         interaction.options.getInteger('grade', true),
         <Subjects>interaction.options.getString('subject', true)
       );
-      const assignments: { name: string; value: string }[] = [];
+      const assignments: { name: string; value: string; inline?: boolean }[] =
+        [];
       className.forEach((res) => {
-        if (parseInt(res.id) > Date.now()) assignments.push(<any>res.data());
+        const data = res.data();
+        if (parseInt(res.id) > Date.now())
+          assignments.push(
+            {
+              name: 'Assignment',
+              value: data.name,
+              inline: true,
+            },
+            {
+              name: 'Due Date',
+              value: new Date(parseInt(res.id)).toLocaleDateString(),
+              inline: true,
+            },
+            {
+              name: 'Subject',
+              value: data.subject,
+              inline: true,
+            },
+            { name: 'Grade', value: data.grade, inline: true },
+            {
+              name: 'Description',
+              value: data.description,
+            }
+          );
       });
       console.log(assignments);
       interaction.reply({

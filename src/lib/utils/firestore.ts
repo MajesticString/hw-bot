@@ -1,4 +1,5 @@
 import { getFirestore } from 'firebase-admin/firestore';
+import { DateTime } from 'luxon';
 
 const db = getFirestore();
 
@@ -40,6 +41,23 @@ export const getClass = async (grade: number | string, subject: Subjects) => {
   return gradeDoc;
 };
 
+export function normalizeGrade(grade: number | string, type: 'number'): number;
+export function normalizeGrade(grade: number | string, type: 'string'): string;
+export function normalizeGrade(
+  grade: number | string,
+  type: 'number' | 'string'
+): string | number {
+  let normalizedGrade: string | undefined;
+  if (typeof grade === 'number') normalizedGrade = `${grade}th`;
+  if (typeof grade === 'string' && grade.includes('th'))
+    normalizedGrade = grade;
+  if (typeof grade === 'string' && !grade.includes('th'))
+    normalizedGrade = `${grade}th`;
+  if (!normalizedGrade) return grade.toString();
+
+  return type === 'string' ? normalizedGrade : normalizedGrade.slice(0, -2);
+}
+
 export const getAssignment = async (
   grade: number | string,
   subject: Subjects,
@@ -54,4 +72,23 @@ export const getAssignment = async (
     .doc(assignment)
     .get();
   return gradeDoc.data();
+};
+export const addAssignment = async (
+  name: string,
+  grade: number,
+  subject: Subjects,
+  dueDate: string,
+  description: string
+) => {
+  const timestamp = DateTime.fromISO(dueDate).toMillis();
+  return await db
+    .collection(`assignments/${grade}th/${subject}`)
+    .doc(timestamp.toString())
+    .set({
+      description,
+      name,
+      grade,
+      subject,
+      dueDate: timestamp,
+    });
 };

@@ -2,13 +2,11 @@ import { ApplyOptions } from '@sapphire/decorators';
 import {
   ApplicationCommandRegistry,
   Command,
-  CommandOptions,
   RegisterBehavior,
 } from '@sapphire/framework';
-import type { CommandInteraction } from 'discord.js';
 import { createHelpCommand } from 'discord-help-command-creator';
 
-@ApplyOptions<CommandOptions>({
+@ApplyOptions<Command.Options>({
   description: 'Displays commands',
   chatInputCommand: {
     register: true,
@@ -17,8 +15,9 @@ import { createHelpCommand } from 'discord-help-command-creator';
   requiredClientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
 })
 export class UserCommand extends Command {
-  public async chatInputRun(interaction: CommandInteraction) {
+  public async chatInputRun(interaction: Command.ChatInputInteraction) {
     createHelpCommand(this.container.stores.get('commands'), interaction);
+    this.container.client.emit('interaction-create');
   }
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry

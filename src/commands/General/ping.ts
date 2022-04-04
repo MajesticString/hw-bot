@@ -9,7 +9,7 @@ import type { CommandInteraction, Message } from 'discord.js';
 import { writeFile } from 'fs/promises';
 import { Util } from '../../lib/utils/Util.js';
 
-@ApplyOptions<CommandOptions>({
+@ApplyOptions<Command.Options>({
   description: 'Displays latency of the bot',
   chatInputCommand: {
     register: true,
@@ -17,7 +17,7 @@ import { Util } from '../../lib/utils/Util.js';
   requiredClientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
 })
 export class UserCommand extends Command {
-  public async chatInputRun(interaction: CommandInteraction) {
+  public async chatInputRun(interaction: Command.ChatInputInteraction) {
     async function fetchAllMessages() {
       console.log('fetching...');
       let messages: Message[] = [];

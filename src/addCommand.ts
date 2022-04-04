@@ -1,6 +1,11 @@
 import { Client, TextInputStyle } from 'discord.js14';
 import config from './config.js';
 import { ActionRowBuilder, ModalBuilder, TextInputBuilder } from 'builders14';
+import {
+  addAssignment,
+  normalizeGrade,
+  Subjects,
+} from './lib/utils/firestore.js';
 
 const client = new Client({
   intents: [
@@ -48,7 +53,7 @@ client.on('interactionCreate', (interaction) => {
                     .setCustomId('due-date')
                     .setStyle(TextInputStyle.Short)
                     .setRequired(true)
-                    .setPlaceholder('mm/dd/yy')
+                    .setPlaceholder('yyyy/mm/dd')
                     .setMinLength(4)
                 ),
                 new ActionRowBuilder().addComponents(
@@ -68,12 +73,56 @@ client.on('interactionCreate', (interaction) => {
       default:
         break;
     }
-  }
-  // Wont work until this is merged: https://github.com/discordjs/discord.js/pull/7649
-  else if (interaction.isModalSubmit()) {
+  } else if (interaction.isModalSubmit()) {
+    const getModalFieldValue = (fieldName: string) =>
+      interaction.fields.fields.get(fieldName)!.value;
     switch (interaction.customId) {
       case 'add-assignment-modal':
-        console.log(interaction.fields.fields.get('assignment-name')?.value);
+        if (
+          normalizeGrade(getModalFieldValue('grade'), 'number') < 9 ||
+          normalizeGrade(getModalFieldValue('grade'), 'number') > 12
+        )
+          return interaction.reply(
+            'Invalid Grade: Grade must be between 9 and 12'
+          );
+        if (
+          getModalFieldValue('subject').toLowerCase() !== 'math' &&
+          getModalFieldValue('subject').toLowerCase() !== 'science' &&
+          getModalFieldValue('subject').toLowerCase() !== 'english' &&
+          getModalFieldValue('subject').toLowerCase() !== 'history'
+        ) {
+          return interaction.reply(
+            'Invalid Subject: Subject must be one of the following: math, science, english, history'
+          );
+        }
+        addAssignment(
+          getModalFieldValue('assignment-name'),
+          normalizeGrade(getModalFieldValue('grade'), 'number'),
+          <Subjects>getModalFieldValue('subject').toLowerCase(),
+          getModalFieldValue('due-date').replaceAll('/', '-'),
+          getModalFieldValue('description')
+        ).then((data) => {
+          interaction.reply({
+            embeds: [
+              {
+                title: 'Successfully Created Assignment',
+                fields: [
+                  {
+                    name: 'Assignment Name',
+                    value: getModalFieldValue('assignment-name'),
+                  },
+                  { name: 'Grade', value: getModalFieldValue('grade') },
+                  { name: 'Subject', value: getModalFieldValue('subject') },
+                  { name: 'Due Date', value: getModalFieldValue('due-date') },
+                  {
+                    name: 'Description',
+                    value: getModalFieldValue('description'),
+                  },
+                ],
+              },
+            ],
+          });
+        });
         break;
 
       default:
