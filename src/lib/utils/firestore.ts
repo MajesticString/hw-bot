@@ -41,23 +41,6 @@ export const getClass = async (grade: number | string, subject: Subjects) => {
   return gradeDoc;
 };
 
-export function normalizeGrade(grade: number | string, type: 'number'): number;
-export function normalizeGrade(grade: number | string, type: 'string'): string;
-export function normalizeGrade(
-  grade: number | string,
-  type: 'number' | 'string'
-): string | number {
-  let normalizedGrade: string | undefined;
-  if (typeof grade === 'number') normalizedGrade = `${grade}th`;
-  if (typeof grade === 'string' && grade.includes('th'))
-    normalizedGrade = grade;
-  if (typeof grade === 'string' && !grade.includes('th'))
-    normalizedGrade = `${grade}th`;
-  if (!normalizedGrade) return grade.toString();
-
-  return type === 'string' ? normalizedGrade : normalizedGrade.slice(0, -2);
-}
-
 export const getAssignment = async (
   grade: number | string,
   subject: Subjects,
@@ -80,7 +63,7 @@ export const addAssignment = async (
   dueDate: string,
   description: string
 ) => {
-  const timestamp = DateTime.fromISO(dueDate).toMillis();
+  const timestamp = new Date(dueDate).getTime();
   return await db
     .collection(`assignments/${grade}th/${subject}`)
     .doc(timestamp.toString())

@@ -13,23 +13,14 @@ import {
 })
 export class UserCommand extends Command {
   public async chatInputRun(interaction: Command.ChatInputInteraction) {
-    if (!interaction.options.getBoolean('use-modal', false)) {
-    }
+    // Implemented in ../../addCommand.ts
   }
   public async registerApplicationCommands(
     registry: ApplicationCommandRegistry
   ) {
     registry.registerChatInputCommand(
-      (builder) =>
-        builder
-          .setName(this.name)
-          .setDescription(this.description)
-          .addBooleanOption((i) =>
-            i
-              .setRequired(false)
-              .setName('use-modal')
-              .setDescription('Whether to use builtin modals')
-          ),
+      (builder) => builder.setName(this.name).setDescription(this.description),
+
       {
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         registerCommandIfMissing: true,

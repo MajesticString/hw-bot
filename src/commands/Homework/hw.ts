@@ -1,12 +1,17 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import {
+  PaginatedMessage,
+  PaginatedMessagePage,
+} from '@sapphire/discord.js-utilities';
+import {
   ApplicationCommandRegistry,
   Command,
   CommandOptions,
   RegisterBehavior,
 } from '@sapphire/framework';
 import type { AutocompleteInteraction, CommandInteraction } from 'discord.js';
-import { getClass, Subjects } from '../../lib/utils/firestore.js';
+import { getClass, Subjects } from '#lib/utils/firestore.js';
+import { Util } from '#lib/utils/Util.js';
 
 @ApplyOptions<CommandOptions>({
   name: 'hw',
@@ -15,13 +20,26 @@ import { getClass, Subjects } from '../../lib/utils/firestore.js';
 })
 export class UserCommand extends Command {
   public async chatInputRun(interaction: CommandInteraction) {
+    if (
+      interaction.options.getString('subject') &&
+      interaction.options.getString('subject')?.toLowerCase() !== 'history' &&
+      interaction.options.getString('subject')?.toLowerCase() !== 'math' &&
+      interaction.options.getString('subject')?.toLowerCase() !== 'science' &&
+      interaction.options.getString('subject')?.toLowerCase() !== 'english'
+    ) {
+      return interaction.reply(
+        'Invalid subject. Please use one of the following: history, math, science, english'
+      );
+    }
     if (interaction.options.getString('subject')) {
       const className = await getClass(
         interaction.options.getInteger('grade', true),
-        <Subjects>interaction.options.getString('subject', true)
+        <Subjects>interaction.options.getString('subject', false)
       );
+
       const assignments: { name: string; value: string; inline?: boolean }[] =
         [];
+
       className.forEach((res) => {
         const data = res.data();
         if (parseInt(res.id) > Date.now())
@@ -48,7 +66,21 @@ export class UserCommand extends Command {
             }
           );
       });
-      console.log(assignments);
+      const pages: PaginatedMessagePage[] = [];
+      pages.push({
+        embeds: [
+          {
+            title: `Homework for ${Util.normalizeGrade(
+              interaction.options.getInteger('grade', true),
+              'number'
+            )}th grade ${interaction.options
+              .getString('subject')
+              ?.toLowerCase()}`,
+            description: '',
+          },
+        ],
+      });
+      const pager = new PaginatedMessage({ pages });
       interaction.reply({
         embeds: [
           {
@@ -68,6 +100,7 @@ export class UserCommand extends Command {
           },
         ],
       });
+    } else {
     }
   }
   public override registerApplicationCommands(
