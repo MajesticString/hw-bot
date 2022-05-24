@@ -56,12 +56,29 @@ export const getAssignment = async (
     .get();
   return gradeDoc.data();
 };
+
+export const editAssignment = async (
+  grade: number | string,
+  subject: Subjects,
+  assignment: string,
+  data: Record<string, unknown>
+) =>
+  await db
+    .collection(
+      `assignments/${
+        typeof grade === 'string' ? grade : `${grade}th`
+      }/${subject}`
+    )
+    .doc(assignment)
+    .set(data, { merge: true });
+
 export const addAssignment = async (
   name: string,
   grade: number,
   subject: Subjects,
   dueDate: string,
-  description: string
+  description: string,
+  userId: string
 ) => {
   const timestamp = new Date(dueDate).getTime();
   return await db
@@ -72,6 +89,20 @@ export const addAssignment = async (
       name,
       grade,
       subject,
+      userId,
       dueDate: timestamp,
     });
 };
+
+export const addReputation = async (userId: string, amount: number) => {
+  const user = await getUser(userId);
+  await db
+    .collection('users')
+    .doc(userId)
+    .set({
+      reputation: user.reputation + amount,
+    });
+  return user.reputation;
+};
+
+export const getReputation = (userId: string) => addReputation(userId, 0);

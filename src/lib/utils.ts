@@ -1,5 +1,4 @@
 import { RandomLoadingMessage } from './constants.js';
-import { send } from '@sapphire/plugin-editable-commands';
 import { Message, MessageEmbed } from 'discord.js';
 
 /**
@@ -18,7 +17,7 @@ export function pickRandom<T>(array: readonly T[]): T {
  * @param message The message data for which to send the loading message
  */
 export function sendLoadingMessage(message: Message): Promise<typeof message> {
-  return send(message, {
+  return message.channel.send({
     embeds: [
       new MessageEmbed()
         .setDescription(pickRandom(RandomLoadingMessage))

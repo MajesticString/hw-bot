@@ -1,7 +1,6 @@
 import '#lib/setup.js';
 import config from './config.js';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
-import './addCommand.js';
 
 process.on('uncaughtException', console.error);
 

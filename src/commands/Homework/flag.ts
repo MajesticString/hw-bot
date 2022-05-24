@@ -1,28 +1,38 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import {
   ApplicationCommandRegistry,
+  Command,
   CommandOptions,
   RegisterBehavior,
 } from '@sapphire/framework';
 import type { CommandInteraction } from 'discord.js';
-import { HwCommand } from '../lib/HwCommand.js';
 
 @ApplyOptions<CommandOptions>({
-  name: '{{name}}',
-  description: '',
+  name: 'flag',
+  description: 'Flags an assignment as potentially incorrect',
 })
-export class UserCommand extends HwCommand {
+export class UserCommand extends Command {
   public async chatInputRun(interaction: CommandInteraction) {
-    interaction.reply('Hello World!');
+    
   }
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry
   ) {
     registry.registerChatInputCommand(
-      (builder) => builder.setName(this.name).setDescription(this.description),
+      (builder) =>
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addStringOption((i) =>
+            i
+              .setName('id')
+              .setRequired(true)
+              .setDescription('Can be found underneath the assignment')
+          ),
       {
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         registerCommandIfMissing: true,
+        idHints: ['966165594623844392'],
       }
     );
   }

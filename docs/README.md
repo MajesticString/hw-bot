@@ -1,1 +1,5 @@
-# in progress... ill make this once i finalize stuff
+# HW Bot
+
+A bot that manages homework
+
+[Guide](./Guide/adding-homework.md)

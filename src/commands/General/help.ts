@@ -8,9 +8,6 @@ import { createHelpCommand } from 'discord-help-command-creator';
 
 @ApplyOptions<Command.Options>({
   description: 'Displays commands',
-  chatInputCommand: {
-    register: true,
-  },
   aliases: ['commands'],
   requiredClientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
 })

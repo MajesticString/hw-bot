@@ -18,52 +18,6 @@ import { Util } from '../../lib/utils/Util.js';
 })
 export class UserCommand extends Command {
   public async chatInputRun(interaction: Command.ChatInputInteraction) {
-    async function fetchAllMessages() {
-      console.log('fetching...');
-      let messages: Message[] = [];
-
-      // Create message pointer
-      let message = await interaction.channel?.messages
-        .fetch({ limit: 1 })
-        .then((messagePage) =>
-          messagePage.size === 1 ? messagePage.at(0) : null
-        );
-
-      while (message) {
-        console.log('fetching more stuff');
-        await Util.sleep(1000);
-        await interaction.channel?.messages
-          .fetch({ limit: 100, before: message.id })
-          .then((messagePage) => {
-            messagePage.forEach((msg) => {
-              if (msg.content !== '' && !message?.author.bot)
-                messages.push(msg);
-            });
-
-            // Update our message pointer to be last message in page of messages
-            message =
-              0 < messagePage.size
-                ? messagePage.at(messagePage.size - 1)
-                : null;
-          });
-      }
-
-      // console.log(messages); // Print all messages
-      const msgJson: { author: string; content: string; createdAt: string }[] =
-        [];
-      messages.forEach((msg) => {
-        if (!msg.author.bot && msg.content !== '')
-          msgJson.push({
-            author: msg.author.username,
-            content: msg.content,
-            createdAt: msg.id,
-          });
-      });
-      msgJson.sort((a, b) => parseFloat(a.createdAt) - parseFloat(b.createdAt));
-      await writeFile('./messages.json', JSON.stringify(msgJson));
-      console.log('finished');
-    }
-    fetchAllMessages();
     const msg = <Message>await interaction.reply({
       content: 'Ping?',
       fetchReply: true,

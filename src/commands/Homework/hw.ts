@@ -1,3 +1,5 @@
+import { getClass, Subjects } from '#lib/utils/firestore.js';
+import { Util } from '#lib/utils/Util.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import {
   PaginatedMessage,
@@ -5,27 +7,25 @@ import {
 } from '@sapphire/discord.js-utilities';
 import {
   ApplicationCommandRegistry,
-  Command,
   CommandOptions,
   RegisterBehavior,
 } from '@sapphire/framework';
-import type { AutocompleteInteraction, CommandInteraction } from 'discord.js';
-import { getClass, Subjects } from '#lib/utils/firestore.js';
-import { Util } from '#lib/utils/Util.js';
+import type { CommandInteraction } from 'discord.js';
+import { HwCommand } from '../../lib/HwCommand.js';
 
 @ApplyOptions<CommandOptions>({
   name: 'hw',
   description: 'Shows homework for a grade',
   requiredClientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
 })
-export class UserCommand extends Command {
+export class UserCommand extends HwCommand {
   public async chatInputRun(interaction: CommandInteraction) {
     if (
       interaction.options.getString('subject') &&
-      interaction.options.getString('subject')?.toLowerCase() !== 'history' &&
-      interaction.options.getString('subject')?.toLowerCase() !== 'math' &&
-      interaction.options.getString('subject')?.toLowerCase() !== 'science' &&
-      interaction.options.getString('subject')?.toLowerCase() !== 'english'
+      ['history', 'math', 'science', 'english'].includes(
+        // true because we checked for it in 2 lines prior
+        interaction.options.getString('subject', true).toLowerCase()
+      )
     ) {
       return interaction.reply(
         'Invalid subject. Please use one of the following: history, math, science, english'
@@ -116,14 +116,24 @@ export class UserCommand extends Command {
               .setName('grade')
               .setDescription('The grades assignments to get.')
               .setRequired(true)
-              .setAutocomplete(true)
+              .addChoices([
+                ['9th grade', 9],
+                ['10th grade', 10],
+                ['11th grade', 11],
+                ['12th grade', 12],
+              ])
           )
           .addStringOption((i) =>
             i
               .setName('subject')
               .setDescription('The subject of the assignment.')
               .setRequired(false)
-              .setAutocomplete(true)
+              .addChoices([
+                ['English', 'english'],
+                ['Math', 'math'],
+                ['Science', 'science'],
+                ['History', 'history'],
+              ])
           )
           .addStringOption((i) =>
             i
@@ -143,23 +153,6 @@ export class UserCommand extends Command {
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ['956773036101599236', '956774184510439494'],
       }
-    );
-  }
-  public async autocompleteRun(interaction: AutocompleteInteraction) {
-    interaction.respond(
-      interaction.options.getFocused(true).name === 'grade'
-        ? [
-            { name: '9th grade', value: 9 },
-            { name: '10th grade', value: 10 },
-            { name: '11th grade', value: 11 },
-            { name: '12th grade', value: 12 },
-          ]
-        : [
-            { name: 'English', value: 'english' },
-            { name: 'Math', value: 'math' },
-            { name: 'Science', value: 'science' },
-            { name: 'History', value: 'history' },
-          ]
     );
   }
 }

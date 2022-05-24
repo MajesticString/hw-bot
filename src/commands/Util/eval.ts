@@ -7,7 +7,6 @@ import {
 import { codeBlock, isThenable } from '@sapphire/utilities';
 import type { CommandInteraction } from 'discord.js';
 import { inspect } from 'util';
-import { TEST_SERVER_ID } from '../../lib/constants.js';
 
 @ApplyOptions<CommandOptions>({
   description: 'Evals any JavaScript code',
@@ -79,8 +78,7 @@ export class UserCommand extends Command {
           ),
 
       {
-        guildIds: ['882695828140073052'],
-        idHints: ['956774185290567720'],
+        idHints: ['962051338508836894'],
       }
     );
   }

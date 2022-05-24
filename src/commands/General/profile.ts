@@ -11,9 +11,6 @@ import type { CommandInteraction, ContextMenuInteraction } from 'discord.js';
 @ApplyOptions<CommandOptions>({
   name: 'profile',
   description: 'Shows general info about a user',
-  chatInputCommand: {
-    register: true,
-  },
   requiredClientPermissions: ['EMBED_LINKS', 'SEND_MESSAGES'],
 })
 export class UserCommand extends Command {
