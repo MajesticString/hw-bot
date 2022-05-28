@@ -22,7 +22,6 @@ export class UserCommand extends Command {
       depth: Number(args.getInteger('depth')) ?? 0,
       showHidden: args.getBoolean('hidden', false) ?? false,
     });
-
     const output = success
       ? codeBlock('js', result)
       : `**ERROR**: ${codeBlock('bash', result)}`;

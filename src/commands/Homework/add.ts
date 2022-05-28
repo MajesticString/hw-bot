@@ -72,7 +72,7 @@ export class UserCommand extends HwCommand {
     );
   }
 
-  public static modalRun(interaction: ModalSubmitInteraction) {
+  public modalRun(interaction: ModalSubmitInteraction) {
     console.log('asdfafdsadfs');
   }
 

@@ -2,7 +2,9 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener } from '@sapphire/framework';
 import { Awaitable, Interaction, ModalSubmitInteraction } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({})
+@ApplyOptions<Listener.Options>({
+  event: Events.InteractionCreate,
+})
 export class InteractionCreateListener extends Listener<
   typeof Events.InteractionCreate
 > {

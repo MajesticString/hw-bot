@@ -9,6 +9,7 @@ import {
   white,
   yellow,
 } from 'colorette';
+import { clearScreen } from '../lib/setup.js';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -25,6 +26,7 @@ export class UserEvent extends Listener {
   public run() {
     this.printBanner();
     this.printStoreDebugInformation();
+    clearScreen();
   }
 
   private printBanner() {

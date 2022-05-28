@@ -12,9 +12,7 @@ import type { CommandInteraction } from 'discord.js';
   description: 'Flags an assignment as potentially incorrect',
 })
 export class UserCommand extends Command {
-  public async chatInputRun(interaction: CommandInteraction) {
-    
-  }
+  public async chatInputRun(interaction: CommandInteraction) {}
   public override registerApplicationCommands(
     registry: ApplicationCommandRegistry
   ) {
