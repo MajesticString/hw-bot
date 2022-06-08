@@ -73,7 +73,7 @@ export class UserCommand extends HwCommand {
   }
 
   public modalRun(interaction: ModalSubmitInteraction) {
-    console.log('asdfafdsadfs');
+    interaction.reply('Submitted!');
   }
 
   public override async registerApplicationCommands(

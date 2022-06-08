@@ -1,6 +1,6 @@
 import '#lib/setup.js';
-import config from './config.js';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
+import config from './config.js';
 
 process.on('uncaughtException', console.error);
 
@@ -16,6 +16,9 @@ const client = new SapphireClient({
   // @ts-ignore
   hmr: {
     enabled: true,
+  },
+  modalCommands: {
+    separator: '--',
   },
   loadMessageCommandListeners: true,
   failIfNotExists: false,

@@ -1,5 +1,5 @@
-import { RandomLoadingMessage } from './constants.js';
 import { Message, MessageEmbed } from 'discord.js';
+import { RandomLoadingMessage } from './constants.js';
 
 /**
  * Picks a random item from an array

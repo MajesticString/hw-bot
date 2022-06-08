@@ -116,24 +116,24 @@ export class UserCommand extends HwCommand {
               .setName('grade')
               .setDescription('The grades assignments to get.')
               .setRequired(true)
-              .addChoices([
-                ['9th grade', 9],
-                ['10th grade', 10],
-                ['11th grade', 11],
-                ['12th grade', 12],
-              ])
+              .addChoices(
+                { name: '9th grade', value: 9 },
+                { name: '10th grade', value: 10 },
+                { name: '11th grade', value: 11 },
+                { name: '12th grade', value: 12 }
+              )
           )
           .addStringOption((i) =>
             i
               .setName('subject')
               .setDescription('The subject of the assignment.')
               .setRequired(false)
-              .addChoices([
-                ['English', 'english'],
-                ['Math', 'math'],
-                ['Science', 'science'],
-                ['History', 'history'],
-              ])
+              .addChoices(
+                { name: 'English', value: 'english' },
+                { name: 'Math', value: 'math' },
+                { name: 'Science', value: 'science' },
+                { name: 'History', value: 'history' }
+              )
           )
           .addStringOption((i) =>
             i

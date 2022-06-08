@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener } from '@sapphire/framework';
-import { Awaitable, Interaction, ModalSubmitInteraction } from 'discord.js';
+import { Interaction, ModalSubmitInteraction } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({
   event: Events.InteractionCreate,
@@ -10,7 +10,7 @@ export class InteractionCreateListener extends Listener<
 > {
   public override run(interaction: Interaction) {
     if (interaction.isModalSubmit()) {
-      this.handleModalSubmits(interaction);
+      // this.handleModalSubmits(interaction);
     }
   }
 
@@ -25,11 +25,5 @@ export class InteractionCreateListener extends Listener<
         .get('commands')
         .get(interaction.customId.split('--')[0])
         .modalRun(interaction);
-  }
-}
-
-declare module '@sapphire/framework' {
-  interface Command {
-    modalRun?(interaction: ModalSubmitInteraction): Awaitable<unknown>;
   }
 }

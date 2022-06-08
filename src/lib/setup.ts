@@ -7,6 +7,7 @@ import { createColors } from 'colorette';
 import { cert, initializeApp } from 'firebase-admin/app';
 import readline from 'node:readline';
 import { inspect } from 'node:util';
+import 'sapphire-plugin-modal-commands/register';
 import config from '../config.js';
 
 // Unless explicitly defined, set NODE_ENV as development:
